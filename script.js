@@ -3,22 +3,17 @@ const quoteid = document.querySelector(".quoteid");
 const nextButton = document.querySelector(".button");
 const API = "https://api.adviceslip.com/advice";
 
-const fetchQuote = () => {
-  // Clear previous quote
-  quote.textContent = "";
-  quoteid.textContent = "";
-
-  setInterval(() => {
-    fetch(API)
-      .then((response) => response.json())
-      .then((data) => {
-        quote.textContent = data.slip.advice;
-        quoteid.textContent = data.slip.id;
-      })
-      .catch((error) => {
-        alert(error.message);
-      });
-  }, 10);
-};
+async function fetchQuote() {
+  try {
+    const timestamp = Date.now();
+    const url = `${API}?t=${timestamp}`;
+    const response = await fetch(url);
+    const data = await response.json();
+    quote.textContent = data.slip.advice;
+    quoteid.textContent = data.slip.id;
+  } catch (error) {
+    console.log(error.message);
+  }
+}
 
 nextButton.addEventListener("click", fetchQuote);
